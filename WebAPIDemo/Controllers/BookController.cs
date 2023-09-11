@@ -92,9 +92,26 @@ namespace WebAPIDemo.Controllers
         }
 
         // DELETE api/<BookController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        [Route("DeleteBook/{id}")]
+        public IActionResult Delete(int id)
         {
+            try
+            {
+                int result = service.DeleteBook(id);
+                if (result >= 1)
+                {
+                    return StatusCode(StatusCodes.Status200OK);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }
